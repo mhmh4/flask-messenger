@@ -14,7 +14,7 @@ public class MainVerticle extends AbstractVerticle {
 
         router.route().handler(StaticHandler.create());
 
-        server.requestHandler(router).listen(8000);
+        server.requestHandler(router).listen(8888);
     }
 
 }
