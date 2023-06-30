@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.11"
 flask = "^2.3.2"
 flask-socketio = "^5.3.4"
+flask-wtf = "^1.1.1"
 
 
 [build-system]
