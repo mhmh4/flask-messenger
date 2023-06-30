@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "rslh"
+version = "0.1.0"
+description = ""
+authors = ["mhmh4 <86537561+mhmh4@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+flask = "^2.3.2"
+flask-socketio = "^5.3.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
