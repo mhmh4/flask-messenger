@@ -1,7 +1,9 @@
 from flask import redirect, render_template, request, url_for
+from flask_login import login_user, logout_user
 
-from rslh import app
+from rslh import app, db
 from rslh.forms import LoginForm, RegistrationForm
+from rslh.models import User
 
 
 @app.after_request
@@ -18,8 +20,13 @@ def index():
 @app.route("/signin", methods=["GET", "POST"])
 def signin():
     form = LoginForm()
-    if request.method == "POST":
-        ...
+    if form.validate_on_submit():
+        username = request.form.get("username")
+        password = request.form.get("password")
+        user = User.query.filter_by(username=username, password=password).first()
+        if not user:
+            return redirect(url_for("signin"))
+        login_user(user)
         return redirect(url_for("home"))
     return render_template("signin.html", form=form)
 
@@ -27,8 +34,12 @@ def signin():
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     form = RegistrationForm()
-    if request.method == "POST":
-        ...
+    if form.validate_on_submit():
+        user = User(
+            username=request.form.get("username"),
+            password=request.form.get("password"))
+        db.session.add(user)
+        db.session.commit()
         return redirect(url_for("signin"))
     return render_template("signup.html", form=form)
 
@@ -40,4 +51,5 @@ def home():
 
 @app.route("/signout", methods=["GET"])
 def signout():
+    logout_user()
     return redirect(url_for("signin"))
