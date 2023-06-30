@@ -12,7 +12,7 @@ public class MainVerticle extends AbstractVerticle {
         final HttpServer server = vertx.createHttpServer();
         final Router router = Router.router(vertx);
 
-        router.route().handler(StaticHandler.create().setCachingEnabled(false));
+        router.route().handler(StaticHandler.create());
 
         server.requestHandler(router).listen(8000);
     }
