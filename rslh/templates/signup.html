@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}
+  <title>RSLH - Sign up</title>
+{% endblock %}
+
+{% block content %}
+<h4>RSLH</h4>
+<div class="d-flex">
+  <div>
+    <a href="{{ url_for('signin') }}">Sign in</a>
+  </div>
+  <div>
+    <a href="{{ url_for('signup') }}"><strong>Sign up</strong></a>
+  </div>
+</div>
+<form class="mt-3" method="post">
+  {{ form.hidden_tag() }}
+  <div class="mb-3">
+    <label class="form-label">Username</label>
+    {{ form.username(class="form-control bg-light") }}
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Password</label>
+    {{ form.password(class="form-control bg-light") }}
+  </div>
+  {{ form.submit(class="btn btn-primary mb-2 px-4", value="Submit") }}
+</form>
+{% endblock %}
