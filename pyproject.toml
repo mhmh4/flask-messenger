@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "rslh"
+name = "msgs"
 version = "0.1.0"
 description = ""
 authors = ["mhmh4 <86537561+mhmh4@users.noreply.github.com>"]
