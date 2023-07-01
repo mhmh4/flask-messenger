@@ -6,17 +6,20 @@
   <a href="{{ url_for('signout') }}">Sign out</a>
 </header>
 <hr>
+Welcome {{ current_user.username }}
 <div class="d-flex">
 
 </div>
 <div>
-  <form>
-    <input type="text" name="" id="" placeholder="Start ">
-    <input type="submit" value="Submit">
+  <form method="post">
+    {{ form.username(class="form-control") }}
+    {{ form.submit(class="btn btn-primary", value="submit") }}
   </form>
 </div>
 <hr>
 <div class="d-flex flex-column">
-
+  {% for conversation in conversations %}
+    {{ conversation }}
+  {% endfor %}
 </div>
 {% endblock %}
