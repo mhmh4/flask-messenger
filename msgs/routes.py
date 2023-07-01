@@ -1,9 +1,9 @@
 from flask import redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 
-from rslh import app, db
-from rslh.forms import ConversationForm, LoginForm, RegistrationForm
-from rslh.models import Conversation, User
+from msgs import app, db
+from msgs.forms import ConversationForm, LoginForm, RegistrationForm
+from msgs.models import Conversation, User
 
 
 @app.after_request
@@ -64,6 +64,11 @@ def home():
         return redirect(url_for("home"))
     conversations = Conversation.query.filter_by(user_id=current_user.id).all()
     return render_template("home.html", form=form, conversations=conversations)
+
+
+@app.route("/conversation", methods=["GET"])
+def conversation():
+    return render_template("conversation.html")
 
 
 @app.route("/signout", methods=["GET"])

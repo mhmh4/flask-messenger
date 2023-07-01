@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<header>
+  MSGS
+  <a href="{{ url_for('signout') }}">Sign out</a>
+</header>
+<a href="{{ url_for('home') }}">back</a>
+<div class="d-flex flex-column">
+  <div>
+
+  </div>
+  <div>
+    <form method="get">
+      <input type="text" name="" id="">
+      <input type="submit" value="Send">
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -2,7 +2,7 @@
 
 {% block content %}
 <header>
-  RSLH
+  MSGS
   <a href="{{ url_for('signout') }}">Sign out</a>
 </header>
 <hr>
@@ -19,7 +19,9 @@ Welcome {{ current_user.username }}
 <hr>
 <div class="d-flex flex-column">
   {% for conversation in conversations %}
-    {{ conversation }}
+    <a href="{{ url_for('conversation') }}">
+      {{ conversation }}
+    </a>
   {% endfor %}
 </div>
 {% endblock %}

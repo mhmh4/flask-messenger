@@ -1,3 +1,3 @@
-from rslh import app
+from msgs import app
 
 app.run(debug=True)
