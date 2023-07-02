@@ -2,7 +2,7 @@ from flask import redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 
 from msgs import app, db
-from msgs.forms import ConversationForm, LoginForm, RegistrationForm
+from msgs.forms import ConversationForm, LoginForm, MessageForm, RegistrationForm
 from msgs.models import Conversation, User
 
 
@@ -54,21 +54,34 @@ def signup():
 @login_required
 def home():
     form = ConversationForm()
-    if request.method == "POST":
+    if form.validate_on_submit():
         recipient = User.query.filter_by(username=request.form.get("username")).first()
         if not recipient:
             return redirect(url_for("home"))
-        db.session.add(Conversation(user_id=current_user.id))
-        db.session.add(Conversation(user_id=recipient.id))
+
+        from sqlalchemy import func
+        latest_conversation_id = db.session.query(func.max(Conversation.conversation_id)).scalar() or 0
+        print("!", latest_conversation_id)
+
+        c1 = Conversation(user_id=current_user.id, conversation_id=latest_conversation_id + 1)
+        db.session.add(c1)
+        db.session.commit()
+        # c1.conversation_id
+        c2 = Conversation(user_id=recipient.id, conversation_id=latest_conversation_id + 1)
+        db.session.add(c2)
         db.session.commit()
         return redirect(url_for("home"))
     conversations = Conversation.query.filter_by(user_id=current_user.id).all()
     return render_template("home.html", form=form, conversations=conversations)
 
 
-@app.route("/conversation", methods=["GET"])
-def conversation():
-    return render_template("conversation.html")
+@app.route("/conversation/<int:conversation_id>", methods=["GET", "POST"])
+def conversation(conversation_id):
+    conversation = Conversation.query.filter_by(conversation_id=conversation_id).first()
+    form = MessageForm()
+    if form.validate_on_submit():
+        redirect(url_for("conversation", conversation_id=conversation_id))
+    return render_template("conversation.html", form=form, conversation=conversation)
 
 
 @app.route("/signout", methods=["GET"])
