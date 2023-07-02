@@ -8,12 +8,13 @@
 <a href="{{ url_for('home') }}">back</a>
 <div class="d-flex flex-column">
   <div>
-
+    {{ conversation }}
   </div>
   <div>
-    <form method="get">
-      <input type="text" name="" id="">
-      <input type="submit" value="Send">
+    <form method="post">
+      {{ form.hidden_tag() }}
+      {{ form.content() }}
+      {{ form.submit() }}
     </form>
   </div>
 </div>
