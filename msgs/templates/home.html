@@ -12,6 +12,7 @@ Welcome {{ current_user.username }}
 </div>
 <div>
   <form method="post">
+    {{ form.hidden_tag() }}
     {{ form.username(class="form-control") }}
     {{ form.submit(class="btn btn-primary", value="submit") }}
   </form>
@@ -19,7 +20,7 @@ Welcome {{ current_user.username }}
 <hr>
 <div class="d-flex flex-column">
   {% for conversation in conversations %}
-    <a href="{{ url_for('conversation') }}">
+    <a href="{{ url_for('conversation', conversation_id=conversation.conversation_id) }}">
       {{ conversation }}
     </a>
   {% endfor %}
