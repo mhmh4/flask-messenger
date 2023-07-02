@@ -18,3 +18,8 @@ class LoginForm(FlaskForm):
 class ConversationForm(FlaskForm):
     username = StringField(validators=[DataRequired()])
     submit = SubmitField()
+
+
+class MessageForm(FlaskForm):
+    content = StringField(validators=[DataRequired()])
+    submit = SubmitField()
