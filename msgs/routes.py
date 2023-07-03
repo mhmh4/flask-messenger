@@ -1,5 +1,6 @@
 from flask import redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
+from flask_socketio import join_room, leave_room
 from sqlalchemy import func
 
 from msgs import app, db, socketio
@@ -101,6 +102,11 @@ def conversation(conversation_id):
     return render_template("conversation.html", form=form, conversation=conversation, messages=messages, other_user=other_user)
 
 
+@socketio.on("join")
+def on_join():
+    join_room(session["conversation_id"])
+
+
 @socketio.on("message")
 def handle_message(data):
     print(f"Received message: {data}")
@@ -116,4 +122,4 @@ def handle_message(data):
         "content": data,
         "username": message.user.username,
         "timestamp": str(message.created_at)
-    })
+        }, to=session["conversation_id"])
