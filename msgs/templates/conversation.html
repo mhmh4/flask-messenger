@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block title %}
-<title>MSGS - Home</title>
+<title>MSGS - Conversation</title>
 {% endblock %}
 
 {% block content %}
-<header class="flex">
+<header class="flex py-2">
   <div class="flex-1">MSGS</div>
   <div>
     {{ current_user.username }} ⏐ <a href="{{ url_for('signout') }}" class="text-sky-600 underline">Sign out</a>
@@ -22,29 +22,31 @@
     {{ other_user }}
   </div>
 </div>
-<div id="messages-container" class="h-96 overflow-y-scroll">
+<div id="messages-container" class="h-96 overflow-y-scroll bg-slate-50 border rounded-lg p-2">
   {% for message in messages %}
     <div>
       {{message.created_at }} {{message.user.username}}: {{message.content}}
     </div>
   {% endfor %}
 </div>
-<div>
-  <form id="form" method="post" class="flex">
-    {{ form.hidden_tag() }}
-    <div>
-      {{
-        form.content(
-          class="my-1 py-0.5 px-2 border border-slate-300 rounded-md placeholder-slate-400",
-          placeholder="Enter a message"
-        )
-      }}
-    </div>
-    <div>
-      {{ form.submit(value="Send") }}
-    </div>
-  </form>
-</div>
+
+<form id="form" method="post" class="flex my-3">
+  {{ form.hidden_tag() }}
+  <div>
+    {{
+      form.content(
+        class="py-0.5 px-2 border border-slate-300 rounded-md placeholder-slate-400",
+        placeholder="Enter a message"
+      )
+    }}
+  </div>
+  <div>
+    {{ form.submit(
+      class="px-10 text-white py-0.5 bg-lime-700 hover:bg-lime-800 rounded-md",
+      value="Send"
+      ) }}
+  </div>
+</form>
 
 <script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
 <script>
