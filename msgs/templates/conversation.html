@@ -1,16 +1,30 @@
 {% extends "base.html" %}
 
 {% block content %}
-<header>
-  MSGS
-  <a href="{{ url_for('signout') }}">Sign out</a>
-</header>
-<a href="{{ url_for('home') }}">back</a>
-<div class="d-flex flex-column">
-  <div>
-    {{ conversation }}
+<header class="d-flex">
+  <div class="flex-grow-1">
+    MSGS
+  </div>
+  <div class="mx-1 border-right">
+    {{ current_user.username }}
   </div>
   <div>
+    |
+  </div>
+  <div class="mx-1">
+    <a href="{{ url_for('signout') }}">Sign out</a>
+  </div>
+</header>
+<div class="d-flex flex-column">
+  <div class="d-flex py-2 mb-2 border-bottom">
+    <div class="col-2">
+      <a href="{{ url_for('home') }}">back</a>
+    </div>
+    <div class="col-10">
+      {{ other_user }}
+    </div>
+  </div>
+  <div style="height: 400px; overflow-y: scroll; overscroll-behavior-y: contain; scroll-snap-type: y proximity;">
     {% for message in messages %}
       <p>{{ message }}</p>
     {% endfor %}
@@ -18,11 +32,13 @@
   <div>
     <form method="post">
       {{ form.hidden_tag() }}
-      <div class="col-7">
-        {{ form.content(class="form-control bg-light") }}
-      </div>
-      <div class="col-5">
-        {{ form.submit(class="btn btn-primary") }}
+      <div class="row">
+        <div class="col-8">
+          {{ form.content(class="form-control bg-light") }}
+        </div>
+        <div class="col-4">
+          {{ form.submit(class="btn btn-primary") }}
+        </div>
       </div>
     </form>
   </div>
