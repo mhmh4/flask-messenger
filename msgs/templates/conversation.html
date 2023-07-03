@@ -12,23 +12,25 @@
 <hr class="my-1">
 <div class="d-flex pb-2 border-bottom">
   <div class="col-2">
-    <a href="{{ url_for('home') }}">back</a>
+    <a href="{{ url_for('home') }}">Back</a>
   </div>
   <div class="col-10">
     {{ other_user }}
   </div>
 </div>
-<div class="my-2" style="height: 400px; overflow-y: scroll; overscroll-behavior-y: contain; scroll-snap-type: y proximity;">
+<div id="messages-container" class="my-2" style="height: 400px; overflow-y: scroll; overscroll-behavior-y: contain; scroll-snap-type: y proximity;">
   {% for message in messages %}
-    <p>{{ message }}</p>
+    <div>
+      {{message.created_at }} {{message.user.username}} {{message.content}}
+    </div>
   {% endfor %}
 </div>
 <div>
-  <form method="post">
+  <form id="form" method="post">
     {{ form.hidden_tag() }}
     <div class="row">
       <div class="col-8">
-        {{ form.content(class="form-control bg-light") }}
+        {{ form.content(class="form-control bg-light", id="content") }}
       </div>
       <div class="col-4">
         {{ form.submit(class="btn btn-primary") }}
@@ -36,4 +38,41 @@
     </div>
   </form>
 </div>
+<script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
+<script>
+  const socket = io();
+  socket.on("connect", () => {
+    socket.emit("my event", {data: "I'm connected!"});
+  });
+
+  const messages = document.getElementById("messages-container");
+
+  const form = document.getElementById("form");
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const input = document.getElementById("content");
+    if (!input.value) {
+      return;
+    }
+    socket.emit("message", input.value);
+    // appendMessage(input.value);
+    input.value = "";
+    input.focus();
+  });
+
+  // make loaded messages use a class as well
+
+  function appendMessage(message) {
+    messages.innerHTML += `
+    <div>
+      ${message.timestamp} ${message.username} ${message.content}
+    </div>
+    `
+  }
+
+  socket.on("new_message", (message) => {
+    console.log(message);
+    appendMessage(message);
+  });
+</script>
 {% endblock %}
