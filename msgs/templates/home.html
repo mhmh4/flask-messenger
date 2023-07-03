@@ -1,20 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-<header>
-  MSGS
-  <a href="{{ url_for('signout') }}">Sign out</a>
+<header class="d-flex">
+  <div class="flex-grow-1">
+    MSGS
+  </div>
+  <div>
+    {{ current_user.username }} ⏐ <a href="{{ url_for('signout') }}">Sign out</a>
+  </div>
 </header>
-<hr>
-Welcome {{ current_user.username }}
-<div class="d-flex">
-
-</div>
+<hr class="my-1">
 <div>
-  <form method="post">
+  <p>Create new conversation</p>
+  <form class="d-flex" method="post">
     {{ form.hidden_tag() }}
-    {{ form.username(class="form-control") }}
-    {{ form.submit(class="btn btn-primary", value="submit") }}
+    <div class="col-9">
+      {{ form.username(class="form-control bg-light", placeholder="Username") }}
+    </div>
+    <div class="col-3 text-center">
+      {{ form.submit(class="btn btn-primary", value="Create") }}
+    </div>
   </form>
 </div>
 <hr>
