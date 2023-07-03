@@ -1,9 +1,14 @@
 {% extends "base.html" %}
+
+{% block title %}
+<title>MSGS - Home</title>
+{% endblock %}
+
 {% block content %}
-<header>
-  <div>MSGS</div>
+<header class="flex">
+  <div class="flex-1">MSGS</div>
   <div>
-    {{ current_user.username }} ⏐ <a href="{{ url_for('signout') }}">Sign out</a>
+    {{ current_user.username }} ⏐ <a href="{{ url_for('signout') }}" class="text-sky-600 underline">Sign out</a>
   </div>
 </header>
 <hr>
@@ -12,7 +17,12 @@
   <form method="post">
     {{ form.hidden_tag() }}
     <div>
-      {{ form.username(placeholder="Username") }}
+      {{
+        form.username(
+          class="my-1 py-0.5 px-2 border border-slate-300 rounded-md placeholder-slate-400",
+          placeholder="Username"
+        )
+      }}
     </div>
     <div>
       {{ form.submit(value="Create") }}
