@@ -1,7 +1,8 @@
-from flask import redirect, render_template, request, url_for
+from flask import redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
+from sqlalchemy import func
 
-from msgs import app, db
+from msgs import app, db, socketio
 from msgs.forms import ConversationForm, LoginForm, MessageForm, RegistrationForm
 from msgs.models import Conversation, Message, User
 
@@ -50,6 +51,13 @@ def signup():
     return render_template("signup.html", form=form)
 
 
+@app.route("/signout", methods=["GET"])
+@login_required
+def signout():
+    logout_user()
+    return redirect(url_for("signin"))
+
+
 @app.route("/home", methods=["GET", "POST"])
 @login_required
 def home():
@@ -59,9 +67,7 @@ def home():
         if not recipient:
             return redirect(url_for("home"))
 
-        from sqlalchemy import func
         latest_conversation_id = db.session.query(func.max(Conversation.conversation_id)).scalar() or 0
-        print("!", latest_conversation_id)
 
         c1 = Conversation(user_id=current_user.id, conversation_id=latest_conversation_id + 1)
         db.session.add(c1)
@@ -79,6 +85,7 @@ def home():
 @login_required
 def conversation(conversation_id):
     conversation = Conversation.query.filter_by(conversation_id=conversation_id).first()
+    session["conversation_id"] = conversation_id
     form = MessageForm()
     if form.validate_on_submit():
         message = Message(
@@ -94,8 +101,19 @@ def conversation(conversation_id):
     return render_template("conversation.html", form=form, conversation=conversation, messages=messages, other_user=other_user)
 
 
-@app.route("/signout", methods=["GET"])
-@login_required
-def signout():
-    logout_user()
-    return redirect(url_for("signin"))
+@socketio.on("message")
+def handle_message(data):
+    print(f"Received message: {data}")
+    print(current_user.id, session["conversation_id"])
+    message = Message(
+            content=data,
+            conversation_id=session["conversation_id"],
+            user_id=current_user.id)
+    db.session.add(message)
+    db.session.commit()
+
+    socketio.emit("new_message", {
+        "content": data,
+        "username": message.user.username,
+        "timestamp": str(message.created_at)
+    })
