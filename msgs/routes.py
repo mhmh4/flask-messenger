@@ -76,18 +76,22 @@ def home():
 
 
 @app.route("/conversation/<int:conversation_id>", methods=["GET", "POST"])
+@login_required
 def conversation(conversation_id):
     conversation = Conversation.query.filter_by(conversation_id=conversation_id).first()
     form = MessageForm()
     if form.validate_on_submit():
         message = Message(
-            content=request.form.get("content"), conversation_id=conversation_id, user_id=current_user.id
-        )
+            content=request.form.get("content"),
+            conversation_id=conversation_id,
+            user_id=current_user.id)
         db.session.add(message)
         db.session.commit()
         return redirect(url_for("conversation", conversation_id=conversation_id))
-    messages = Message.query.filter_by(conversation_id=conversation_id).all()
-    return render_template("conversation.html", form=form, conversation=conversation, messages=messages)
+    tmp = Message.query.filter_by(conversation_id=conversation_id)
+    messages = tmp.all()
+    other_user = Conversation.query.filter_by(conversation_id=conversation_id).filter(Conversation.user_id != current_user.id).first().user.username
+    return render_template("conversation.html", form=form, conversation=conversation, messages=messages, other_user=other_user)
 
 
 @app.route("/signout", methods=["GET"])
