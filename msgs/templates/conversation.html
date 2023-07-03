@@ -21,7 +21,7 @@
 <div id="messages-container" class="my-2" style="height: 400px; overflow-y: scroll; overscroll-behavior-y: contain; scroll-snap-type: y proximity;">
   {% for message in messages %}
     <div>
-      {{message.created_at }} {{message.user.username}} {{message.content}}
+      {{message.created_at }} {{message.user.username}}: {{message.content}}
     </div>
   {% endfor %}
 </div>
@@ -43,6 +43,7 @@
   const socket = io();
   socket.on("connect", () => {
     socket.emit("my event", {data: "I'm connected!"});
+    socket.emit("join");
   });
 
   const messages = document.getElementById("messages-container");
@@ -55,7 +56,6 @@
       return;
     }
     socket.emit("message", input.value);
-    // appendMessage(input.value);
     input.value = "";
     input.focus();
   });
@@ -65,7 +65,7 @@
   function appendMessage(message) {
     messages.innerHTML += `
     <div>
-      ${message.timestamp} ${message.username} ${message.content}
+      ${message.timestamp} ${message.username}: ${message.content}
     </div>
     `
   }
