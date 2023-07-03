@@ -7,26 +7,33 @@
 {% block content %}
 <h4>MSGS</h4>
 
-<div>
+<div class="flex my-3">
   <div>
-    <a href="{{ url_for('signin') }}">Sign in</a>
+    <a href="{{ url_for('signin') }}" class="text-black px-10 py-2 rounded-lg border">Sign in</a>
   </div>
   <div>
-    <strong>
-      <a href="{{ url_for('signup') }}">Sign up</a>
-    </strong>
+    <a href="{{ url_for('signup') }}" class="text-sky-600 px-10 py-2 rounded-lg border">Sign up</a>
   </div>
 </div>
 
 <form method="post">
   {{ form.hidden_tag() }}
   <div>
-    {{ form.username(placeholder="Username") }}
+    {{
+      form.username(
+        class="my-1 py-0.5 px-2 border border-slate-300 rounded-md placeholder-slate-400",
+        placeholder="Username"
+      )
+    }}
   </div>
   <div>
-    {{ form.password(placeholder="Password") }}
+    {{
+      form.password(
+        class="my-1 py-0.5 px-2 border border-slate-300 rounded-md placeholder-slate-400",
+        placeholder="Password"
+      )
+    }}
   </div>
-  {{ form.submit(value="Submit") }}
+  {{ form.submit(class="px-3 my-2 text-white bg-cyan-500 hover:bg-cyan-600 rounded-md", value="Submit") }}
 </form>
-
 {% endblock %}
