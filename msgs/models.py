@@ -16,7 +16,7 @@ class User(db.Model, UserMixin):
     id = Column(Integer, primary_key=True)
     username = Column(String, nullable=False, unique=True)
     password = Column(String, nullable=False)
-    # conversations = relationship("Conversation", backref="user", lazy=True)
+    conversations = relationship("Conversation", backref="user", lazy=True)
     messages = relationship("Message", backref="user", lazy=True)
 
 
@@ -26,8 +26,6 @@ class Conversation(db.Model):
     conversation_id = Column(Integer)
     messages = relationship("Message", backref="conversation", lazy=True)
 
-    def __repr__(self):
-        return f"<Conversation {self.conversation_id}>"
 
 class Message(db.Model):
     id = Column(Integer, primary_key=True)
