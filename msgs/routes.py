@@ -3,7 +3,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 
 from msgs import app, db
 from msgs.forms import ConversationForm, LoginForm, MessageForm, RegistrationForm
-from msgs.models import Conversation, User
+from msgs.models import Conversation, Message, User
 
 
 @app.after_request
@@ -80,8 +80,14 @@ def conversation(conversation_id):
     conversation = Conversation.query.filter_by(conversation_id=conversation_id).first()
     form = MessageForm()
     if form.validate_on_submit():
-        redirect(url_for("conversation", conversation_id=conversation_id))
-    return render_template("conversation.html", form=form, conversation=conversation)
+        message = Message(
+            content=request.form.get("content"), conversation_id=conversation_id, user_id=current_user.id
+        )
+        db.session.add(message)
+        db.session.commit()
+        return redirect(url_for("conversation", conversation_id=conversation_id))
+    messages = Message.query.filter_by(conversation_id=conversation_id).all()
+    return render_template("conversation.html", form=form, conversation=conversation, messages=messages)
 
 
 @app.route("/signout", methods=["GET"])
