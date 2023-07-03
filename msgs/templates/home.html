@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-<header class="flex">
+<header class="flex py-2">
   <div class="flex-1">MSGS</div>
   <div>
     {{ current_user.username }} ⏐ <a href="{{ url_for('signout') }}" class="text-sky-600 underline">Sign out</a>
@@ -14,12 +14,12 @@
 <hr>
 <div>
   <p>Create new conversation</p>
-  <form method="post">
+  <form method="post" class="flex my-2">
     {{ form.hidden_tag() }}
     <div>
       {{
         form.username(
-          class="my-1 py-0.5 px-2 border border-slate-300 rounded-md placeholder-slate-400",
+          class="py-0.5 px-2 border border-slate-300 rounded-md placeholder-slate-400",
           placeholder="Username"
         )
       }}
@@ -31,12 +31,18 @@
 </div>
 <hr>
 <div>
-  {% for conversation in conversations %}
-  <div>
-    <a href="{{ url_for('conversation', conversation_id=conversation.conversation_id) }}">
-      {{ conversation }}
-    </a>
+  <p>My conversations</p>
+  <div class="flex flex-col">
+    {% for conversation in conversations %}
+    <div class="my-1">
+      <a
+        href="{{ url_for('conversation', conversation_id=conversation.conversation_id) }}"
+        class="border text-sky-600 underline"
+      >
+        {{ conversation }}
+      </a>
+    </div>
+    {% endfor %}
   </div>
-  {% endfor %}
 </div>
 {% endblock %}
