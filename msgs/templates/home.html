@@ -1,33 +1,32 @@
 {% extends "base.html" %}
-
 {% block content %}
-<header class="d-flex">
-  <div class="flex-grow-1">
-    MSGS
-  </div>
+<header>
+  <div>MSGS</div>
   <div>
     {{ current_user.username }} ⏐ <a href="{{ url_for('signout') }}">Sign out</a>
   </div>
 </header>
-<hr class="my-1">
+<hr>
 <div>
   <p>Create new conversation</p>
-  <form class="d-flex" method="post">
+  <form method="post">
     {{ form.hidden_tag() }}
-    <div class="col-9">
-      {{ form.username(class="form-control bg-light", placeholder="Username") }}
+    <div>
+      {{ form.username(placeholder="Username") }}
     </div>
-    <div class="col-3 text-center">
-      {{ form.submit(class="btn btn-primary", value="Create") }}
+    <div>
+      {{ form.submit(value="Create") }}
     </div>
   </form>
 </div>
 <hr>
-<div class="d-flex flex-column">
+<div>
   {% for conversation in conversations %}
+  <div>
     <a href="{{ url_for('conversation', conversation_id=conversation.conversation_id) }}">
       {{ conversation }}
     </a>
+  </div>
   {% endfor %}
 </div>
 {% endblock %}
