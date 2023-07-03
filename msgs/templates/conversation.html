@@ -1,21 +1,28 @@
 {% extends "base.html" %}
+
+{% block title %}
+<title>MSGS - Home</title>
+{% endblock %}
+
 {% block content %}
-<header>
-  <div>MSGS</div>
-  <div>{{ current_user.username }} ⏐ <a href="{{ url_for('signout') }}">Sign out</a></div>
+<header class="flex">
+  <div class="flex-1">MSGS</div>
+  <div>
+    {{ current_user.username }} ⏐ <a href="{{ url_for('signout') }}" class="text-sky-600 underline">Sign out</a>
+  </div>
 </header>
 
 <hr>
 
-<div>
-  <div>
-    <a href="{{ url_for('home') }}">Back</a>
+<div class="flex py-2">
+  <div class="me-2">
+    <a href="{{ url_for('home') }}" class="text-sky-600 underline">Back</a>
   </div>
   <div>
     {{ other_user }}
   </div>
 </div>
-<div id="messages-container">
+<div id="messages-container" class="h-96 overflow-y-scroll">
   {% for message in messages %}
     <div>
       {{message.created_at }} {{message.user.username}}: {{message.content}}
@@ -23,15 +30,18 @@
   {% endfor %}
 </div>
 <div>
-  <form id="form" method="post">
+  <form id="form" method="post" class="flex">
     {{ form.hidden_tag() }}
     <div>
-      <div>
-        {{ form.content() }}
-      </div>
-      <div>
-        {{ form.submit(value="Send") }}
-      </div>
+      {{
+        form.content(
+          class="my-1 py-0.5 px-2 border border-slate-300 rounded-md placeholder-slate-400",
+          placeholder="Enter a message"
+        )
+      }}
+    </div>
+    <div>
+      {{ form.submit(value="Send") }}
     </div>
   </form>
 </div>
