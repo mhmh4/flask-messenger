@@ -11,10 +11,19 @@
     {{ conversation }}
   </div>
   <div>
+    {% for message in messages %}
+      <p>{{ message }}</p>
+    {% endfor %}
+  </div>
+  <div>
     <form method="post">
       {{ form.hidden_tag() }}
-      {{ form.content() }}
-      {{ form.submit() }}
+      <div class="col-7">
+        {{ form.content(class="form-control bg-light") }}
+      </div>
+      <div class="col-5">
+        {{ form.submit(class="btn btn-primary") }}
+      </div>
     </form>
   </div>
 </div>
