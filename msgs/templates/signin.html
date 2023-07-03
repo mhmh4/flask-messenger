@@ -5,35 +5,37 @@
 {% endblock %}
 
 {% block content %}
-<h4>MSGS</h4>
+<h1 class="text-center text-2xl my-4">MSGS</h1>
 
-<div class="flex my-3">
-  <div>
-    <a href="{{ url_for('signin') }}" class="text-sky-600 px-10 py-2 rounded-lg border">Sign in</a>
+<div class="text-center">
+  <div class="flex my-3 py-2.5 bg-slate-100 rounded-md">
+    <div class="flex-1">
+      <a href="{{ url_for('signin') }}" class="text-sky-600 bg-white mx-0.5 px-12 py-2 rounded-lg border border-slate-200">Sign in</a>
+    </div>
+    <div class="flex-1">
+      <a href="{{ url_for('signup') }}" class="text-black bg-white mx-0.5 px-12 py-2 rounded-lg border border-slate-200">Sign up</a>
+    </div>
   </div>
-  <div>
-    <a href="{{ url_for('signup') }}" class="text-black px-10 py-2 rounded-lg border">Sign up</a>
-  </div>
+
+  <form method="post">
+    {{ form.hidden_tag() }}
+    <div>
+      {{
+        form.username(
+          class="my-1 py-0.5 px-2 border border-slate-300 rounded-md placeholder-slate-400",
+          placeholder="Username"
+        )
+      }}
+    </div>
+    <div>
+      {{
+        form.password(
+          class="my-1 py-0.5 px-2 border border-slate-300 rounded-md placeholder-slate-400",
+          placeholder="Password"
+        )
+      }}
+    </div>
+    {{ form.submit(class="px-12 my-2 text-white bg-lime-700 hover:bg-lime-800 rounded-md", value="Submit") }}
+  </form>
 </div>
-
-<form method="post">
-  {{ form.hidden_tag() }}
-  <div>
-    {{
-      form.username(
-        class="my-1 py-0.5 px-2 border border-slate-300 rounded-md placeholder-slate-400",
-        placeholder="Username"
-      )
-    }}
-  </div>
-  <div>
-    {{
-      form.password(
-        class="my-1 py-0.5 px-2 border border-slate-300 rounded-md placeholder-slate-400",
-        placeholder="Password"
-      )
-    }}
-  </div>
-  {{ form.submit(class="px-3 my-2 text-white bg-cyan-500 hover:bg-cyan-600 rounded-md", value="Submit") }}
-</form>
 {% endblock %}
