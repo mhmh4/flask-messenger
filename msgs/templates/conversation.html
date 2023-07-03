@@ -1,24 +1,21 @@
 {% extends "base.html" %}
-
 {% block content %}
-<header class="d-flex">
-  <div class="flex-grow-1">
-    MSGS
-  </div>
-  <div>
-    {{ current_user.username }} ⏐ <a href="{{ url_for('signout') }}">Sign out</a>
-  </div>
+<header>
+  <div>MSGS</div>
+  <div>{{ current_user.username }} ⏐ <a href="{{ url_for('signout') }}">Sign out</a></div>
 </header>
-<hr class="my-1">
-<div class="d-flex pb-2 border-bottom">
-  <div class="col-2">
+
+<hr>
+
+<div>
+  <div>
     <a href="{{ url_for('home') }}">Back</a>
   </div>
-  <div class="col-10">
+  <div>
     {{ other_user }}
   </div>
 </div>
-<div id="messages-container" class="my-2" style="height: 400px; overflow-y: scroll; overscroll-behavior-y: contain; scroll-snap-type: y proximity;">
+<div id="messages-container">
   {% for message in messages %}
     <div>
       {{message.created_at }} {{message.user.username}}: {{message.content}}
@@ -28,16 +25,17 @@
 <div>
   <form id="form" method="post">
     {{ form.hidden_tag() }}
-    <div class="row">
-      <div class="col-8">
-        {{ form.content(class="form-control bg-light", id="content") }}
+    <div>
+      <div>
+        {{ form.content() }}
       </div>
-      <div class="col-4">
-        {{ form.submit(class="btn btn-primary") }}
+      <div>
+        {{ form.submit(value="Send") }}
       </div>
     </div>
   </form>
 </div>
+
 <script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
 <script>
   const socket = io();
