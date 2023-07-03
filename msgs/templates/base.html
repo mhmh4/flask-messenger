@@ -3,13 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   {% block title %}
   <title>MSGS</title>
   {% endblock %}
+
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-  <div class="w-1/2 mx-auto px-4 border">
+  <div class="w-1/2 min-h-screen mx-auto px-4 border">
     {% block content %}{% endblock %}
   </div>
 </body>
