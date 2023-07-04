@@ -13,26 +13,30 @@ def load_user(user_id):
 
 
 class User(db.Model, UserMixin):
-    id = Column(Integer, primary_key=True)
-    username = Column(String, nullable=False, unique=True)
-    password = Column(String, nullable=False)
-    conversations = relationship("Conversation", backref="user", lazy=True)
-    messages = relationship("Message", backref="user", lazy=True)
+    id             = Column(Integer, primary_key=True)
+    username       = Column(String(255), nullable=False, unique=True)
+    password       = Column(String(255), nullable=False)
+    messages       = relationship("Message", backref="user", lazy=True)
+    participations = relationship("Participation", backref="user", lazy=True)
+
+
+class Participation(db.Model):
+    id              = Column(Integer, primary_key=True)
+    user_id         = Column(Integer, ForeignKey("user.id"))
+    conversation_id = Column(Integer, ForeignKey("conversation.id"))
 
 
 class Conversation(db.Model):
-    uid = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("user.id"))
-    conversation_id = Column(Integer)
-    messages = relationship("Message", backref="conversation", lazy=True)
+    id = Column(Integer, primary_key=True)
+
 
 
 class Message(db.Model):
-    id = Column(Integer, primary_key=True)
-    content = Column(String)
-    created_at = Column(DateTime, default=datetime.utcnow())
-    conversation_id = Column(Integer, ForeignKey("conversation.conversation_id"))
-    user_id = Column(Integer, ForeignKey("user.id"))
+    id              = Column(Integer, primary_key=True)
+    content         = Column(String(255))
+    created_at      = Column(DateTime, default=lambda: datetime.utcnow())
+    conversation_id = Column(Integer, ForeignKey("conversation.id"))
+    user_id         = Column(Integer, ForeignKey("user.id"))
 
     def __repr__(self):
         return f"({self.created_at}) {self.user.username}: {self.content}"
