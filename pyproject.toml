@@ -12,6 +12,7 @@ flask-socketio = "^5.3.4"
 flask-wtf = "^1.1.1"
 flask-login = "^0.6.2"
 flask-sqlalchemy = "^3.0.5"
+flask-minify = "^0.42"
 
 
 [build-system]
