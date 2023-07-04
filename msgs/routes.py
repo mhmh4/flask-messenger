@@ -1,11 +1,10 @@
 from flask import redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
-from flask_socketio import join_room, leave_room
-from sqlalchemy import func
+from flask_socketio import join_room
 
 from msgs import app, db, socketio
 from msgs.forms import ConversationForm, LoginForm, MessageForm, RegistrationForm
-from msgs.models import Conversation, Message, User
+from msgs.models import Conversation, Message, Participation, User
 
 
 @app.after_request
@@ -44,8 +43,8 @@ def signup():
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(
-            username=request.form.get("username"),
-            password=request.form.get("password"))
+            username=request.form.get("username"), password=request.form.get("password")
+        )
         db.session.add(user)
         db.session.commit()
         return redirect(url_for("signin"))
@@ -63,43 +62,71 @@ def signout():
 @login_required
 def home():
     form = ConversationForm()
+
     if form.validate_on_submit():
-        recipient = User.query.filter_by(username=request.form.get("username")).first()
-        if not recipient:
+        other_user = User.query.filter_by(username=request.form.get("username")).first()
+        if not other_user:
             return redirect(url_for("home"))
 
-        latest_conversation_id = db.session.query(func.max(Conversation.conversation_id)).scalar() or 0
+        conversation = Conversation()
+        db.session.add(conversation)
+        db.session.commit()  # `conversation.id` now usuable
 
-        c1 = Conversation(user_id=current_user.id, conversation_id=latest_conversation_id + 1)
-        db.session.add(c1)
+        db.session.add(
+            Participation(user_id=current_user.id, conversation_id=conversation.id)
+        )
+        db.session.add(
+            Participation(user_id=other_user.id, conversation_id=conversation.id)
+        )
         db.session.commit()
-        # c1.conversation_id
-        c2 = Conversation(user_id=recipient.id, conversation_id=latest_conversation_id + 1)
-        db.session.add(c2)
-        db.session.commit()
+
         return redirect(url_for("home"))
-    conversations = Conversation.query.filter_by(user_id=current_user.id).all()
+
+    conversations = (
+        Participation.query.with_entities(Participation.conversation_id)
+        .filter(Participation.user_id == current_user.id)
+        .all()
+    )
+
     return render_template("home.html", form=form, conversations=conversations)
 
 
 @app.route("/conversation/<int:conversation_id>", methods=["GET", "POST"])
 @login_required
 def conversation(conversation_id):
-    conversation = Conversation.query.filter_by(conversation_id=conversation_id).first()
+    conversation = Conversation.query.filter_by(id=conversation_id).first()
     session["conversation_id"] = conversation_id
+
     form = MessageForm()
+
     if form.validate_on_submit():
         message = Message(
             content=request.form.get("content"),
             conversation_id=conversation_id,
-            user_id=current_user.id)
+            user_id=current_user.id,
+        )
         db.session.add(message)
         db.session.commit()
         return redirect(url_for("conversation", conversation_id=conversation_id))
-    tmp = Message.query.filter_by(conversation_id=conversation_id)
-    messages = tmp.all()
-    other_user = Conversation.query.filter_by(conversation_id=conversation_id).filter(Conversation.user_id != current_user.id).first().user.username
-    return render_template("conversation.html", form=form, conversation=conversation, messages=messages, other_user=other_user)
+
+    messages = Message.query.filter_by(conversation_id=conversation_id).all()
+
+    other_user = (
+        Participation.query.filter(
+            Participation.conversation_id == conversation_id,
+            Participation.user_id != current_user.id,
+        )
+        .first()
+        .user.username
+    )
+
+    return render_template(
+        "conversation.html",
+        form=form,
+        conversation=conversation,
+        messages=messages,
+        other_user=other_user,
+    )
 
 
 @socketio.on("join")
@@ -112,14 +139,19 @@ def handle_message(data):
     print(f"Received message: {data}")
     print(current_user.id, session["conversation_id"])
     message = Message(
-            content=data,
-            conversation_id=session["conversation_id"],
-            user_id=current_user.id)
+        content=data,
+        conversation_id=session["conversation_id"],
+        user_id=current_user.id,
+    )
     db.session.add(message)
     db.session.commit()
 
-    socketio.emit("new_message", {
-        "content": data,
-        "username": message.user.username,
-        "timestamp": str(message.created_at)
-        }, to=session["conversation_id"])
+    socketio.emit(
+        "new_message",
+        {
+            "content": data,
+            "username": message.user.username,
+            "timestamp": str(message.created_at),
+        },
+        to=session["conversation_id"],
+    )
