@@ -7,9 +7,9 @@
 {% block content %}
 <header class="flex py-2">
   <div class="flex-1">MSGS</div>
-  <div>
-    {{ current_user.username }} ⏐ <a href="{{ url_for('signout') }}" class="text-sky-600 underline">Sign out</a>
-  </div>
+  <form method="post" action="{{ url_for('signout') }}">
+    {{ current_user.username }} ⏐ <input type="submit" class="text-sky-600 underline hover:cursor-pointer" value="Sign out">
+  </form>
 </header>
 <hr>
 <div>
