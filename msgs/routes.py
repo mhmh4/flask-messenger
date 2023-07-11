@@ -15,8 +15,6 @@ def after_request(response):
 
 @app.route("/", methods=["GET"])
 def index():
-    if current_user.is_authenticated:
-        return redirect(url_for("home"))
     return redirect(url_for("signin"))
 
 
