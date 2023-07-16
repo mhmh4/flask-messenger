@@ -22,9 +22,9 @@
     {{ other_user }}
   </div>
 </div>
-<div id="messages-container" class="h-96 overflow-y-scroll bg-slate-50 border rounded-lg p-2">
+<div id="messages-container" class="h-96 overflow-y-scroll bg-slate-50 border rounded-lg p-2 scroll-smooth">
   {% for message in messages %}
-    <div class="border border-slate-250 px-2 py-1 my-1 rounded">
+    <div class="border border-slate-250 px-2 py-1 my-1 rounded bg-white hover:bg-slate-50">
       {{message.created_at }} {{message.user.username}}: {{message.content}}
     </div>
   {% endfor %}
@@ -78,6 +78,7 @@
       ${message.timestamp} ${message.username}: ${message.content}
     </div>
     `
+    messages.scrollTop = messages.scrollHeight;
   }
 
   socket.on("new_message", (message) => {
