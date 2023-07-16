@@ -13,6 +13,7 @@ flask-wtf = "^1.1.1"
 flask-login = "^0.6.2"
 flask-sqlalchemy = "^3.0.5"
 flask-minify = "^0.42"
+mysqlclient = "^2.2.0"
 
 
 [build-system]
