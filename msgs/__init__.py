@@ -1,3 +1,4 @@
+import configparser
 import os
 
 from flask import Flask
@@ -8,7 +9,16 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY") or "secret key"
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///main.db"
+
+# SQLite
+# app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///main.db"
+
+# MySQL
+config = configparser.ConfigParser()
+config.read("config.ini")
+uri = "mysql://{}:{}@{}:{}/{}"
+uri = uri.format(*config["mysql"].values())
+app.config["SQLALCHEMY_DATABASE_URI"] = uri
 
 Minify(app=app, html=True, js=True)
 db = SQLAlchemy(app)
