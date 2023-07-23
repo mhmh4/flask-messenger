@@ -1,4 +1,4 @@
-from flask import redirect, render_template, request, session, url_for
+from flask import flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from flask_socketio import join_room
 from sqlalchemy import select
@@ -29,6 +29,7 @@ def signin():
         password = request.form.get("password")
         user = User.query.filter_by(username=username, password=password).first()
         if not user:
+            flash("Invalid username or password.")
             return redirect(url_for("signin"))
         login_user(user)
         return redirect(url_for("home"))
@@ -41,8 +42,12 @@ def signup():
         return redirect(url_for("home"))
     form = RegistrationForm()
     if form.validate_on_submit():
+        username = request.form.get("username")
+        if User.query.filter_by(username=username).count():
+            flash("Username already exists.")
+            return redirect(url_for("signup"))
         user = User(
-            username=request.form.get("username"), password=request.form.get("password")
+            username=username, password=request.form.get("password")
         )
         db.session.add(user)
         db.session.commit()
