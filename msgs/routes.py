@@ -81,8 +81,11 @@ def home():
         return redirect(url_for("home"))
 
     conversations = (
-        Participation.query.with_entities(Participation.conversation_id)
-        .filter(Participation.user_id == current_user.id)
+        db.session.query(User)
+        .join(Participation)
+        .join(Conversation)
+        .with_entities(Conversation.id, User.username)
+        .filter(User.id != current_user.id)
         .all()
     )
 
