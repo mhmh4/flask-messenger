@@ -36,10 +36,10 @@
     {% for conversation in conversations %}
     <div class="my-1">
       <a
-        href="{{ url_for('conversation', conversation_id=conversation.conversation_id) }}"
+        href="{{ url_for('conversation', conversation_id=conversation[0]) }}"
         class="border text-sky-600 underline"
       >
-        {{ conversation }}
+        {{ conversation[1] }}
       </a>
     </div>
     {% endfor %}

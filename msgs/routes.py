@@ -1,6 +1,7 @@
 from flask import redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from flask_socketio import join_room
+from sqlalchemy import select
 
 from msgs import app, db, socketio
 from msgs.forms import ConversationForm, LoginForm, MessageForm, RegistrationForm
@@ -80,9 +81,23 @@ def home():
 
         return redirect(url_for("home"))
 
+    participating_conversations = (
+        select(Participation.conversation_id)
+        .where(Participation.user_id == current_user.id)
+        .alias("participating_conversations")
+    )
+
     conversations = (
-        Participation.query.with_entities(Participation.conversation_id)
-        .filter(Participation.user_id == current_user.id)
+        db.session.query(
+            participating_conversations.c.conversation_id,
+            User.username.label("other_user")
+        )
+        .join(
+            Participation,
+            Participation.conversation_id == participating_conversations.c.conversation_id
+        )
+        .join(User, User.id == Participation.user_id)
+        .filter(User.id != current_user.id)
         .all()
     )
 
