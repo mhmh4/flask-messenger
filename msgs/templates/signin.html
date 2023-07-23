@@ -19,6 +19,15 @@
 
   <form method="post">
     {{ form.hidden_tag() }}
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="border">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
     <div>
       {{
         form.username(

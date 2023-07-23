@@ -8,7 +8,7 @@
 <header class="flex py-2">
   <div class="flex-1">MSGS</div>
   <form method="post" action="{{ url_for('signout') }}">
-    {{ current_user.username }} ⏐ <input type="submit" class="text-sky-600 underline hover:cursor-pointer" value="Sign out">
+    <span class="text-gray-400">{{ current_user.username }}</span> <span class="text-gray-500 mx-1">-</span> <input type="submit" class="text-sky-600 underline hover:cursor-pointer" value="Sign out">
   </form>
 </header>
 
