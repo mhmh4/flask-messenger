@@ -13,7 +13,19 @@
   </header>
   <hr>
   <div>
-    <p>Create new conversation</p>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for message in messages %}
+        <div class="border">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  </div>
+  <div class="flex">
+    <div>
+      <p>Create new conversation</p>
+    </div>
     <form method="post" class="flex my-2">
       {{ form.hidden_tag() }}
       <div>
