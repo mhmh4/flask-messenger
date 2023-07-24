@@ -17,7 +17,7 @@
     {% with messages = get_flashed_messages() %}
     {% if messages %}
       {% for message in messages %}
-        <div class="border">{{ message }}</div>
+      <div class="border my-2 py-1.5 rounded bg-slate-100 border-slate-300 px-2 mx-2">{{ message }}</div>
       {% endfor %}
     {% endif %}
   {% endwith %}
