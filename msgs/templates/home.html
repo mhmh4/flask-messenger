@@ -5,44 +5,41 @@
 {% endblock %}
 
 {% block content %}
-<header class="flex py-2">
-  <div class="flex-1">MSGS</div>
-  <form method="post" action="{{ url_for('signout') }}">
-    <span class="text-gray-400">{{ current_user.username }}</span> <span class="text-gray-500 mx-1">-</span> <input type="submit" class="text-sky-600 underline hover:cursor-pointer" value="Sign out">
-  </form>
-</header>
-<hr>
-<div>
-  <p>Create new conversation</p>
-  <form method="post" class="flex my-2">
-    {{ form.hidden_tag() }}
-    <div>
-      {{
-        form.username(
-          class="py-0.5 px-2 border border-slate-300 rounded-md placeholder-slate-400",
-          placeholder="Username"
-        )
-      }}
-    </div>
-    <div>
-      {{ form.submit(value="Create") }}
-    </div>
-  </form>
-</div>
-<hr>
-<div>
-  <p>My conversations</p>
-  <div class="flex flex-col">
-    {% for conversation in conversations %}
-    <div class="my-1">
-      <a
-        href="{{ url_for('conversation', conversation_id=conversation[0]) }}"
-        class="border text-sky-600 underline"
-      >
-        {{ conversation[1] }}
-      </a>
-    </div>
-    {% endfor %}
+  <header class="flex py-2">
+    <div class="flex-1">MSGS</div>
+    <form method="post" action="{{ url_for('signout') }}">
+      <span class="text-gray-400">{{ current_user.username }}</span> <span class="text-gray-500 mx-1">-</span> <input type="submit" class="text-sky-600 underline hover:cursor-pointer" value="Sign out">
+    </form>
+  </header>
+  <hr>
+  <div>
+    <p>Create new conversation</p>
+    <form method="post" class="flex my-2">
+      {{ form.hidden_tag() }}
+      <div>
+        {{
+          form.username(
+            class="py-0.5 px-2 border border-slate-300 rounded-md placeholder-slate-400",
+            placeholder="Username"
+          )
+        }}
+      </div>
+      <div>
+        {{ form.submit(value="Create") }}
+      </div>
+    </form>
   </div>
-</div>
+  <hr class="my-1">
+  <div>
+    <p>My conversations</p>
+    <div class="flex flex-col">
+      {% for conversation in conversations %}
+        <a href="{{ url_for('conversation', conversation_id=conversation[0]) }}">
+          <div class="my-1 border py-2 rounded px-2 hover:bg-[#f9f9f9]">
+            <span class="text-sky-600">{{ conversation[1] }}</span>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
 {% endblock %}
