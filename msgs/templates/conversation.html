@@ -94,7 +94,7 @@
   function appendMessage(message) {
     messages.innerHTML += `
     <div class="border border-slate-250 px-2 py-1 my-1 rounded">
-      ${message.created_at} ${message.username}: ${message.content.o}
+      ${message.created_at} ${message.username}: ${message.content}
     </div>
     `
     messages.scrollTop = messages.scrollHeight;
