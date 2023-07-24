@@ -24,25 +24,31 @@
 </div>
 <div id="messages-container" class="h-96 overflow-y-scroll bg-slate-50 border rounded-lg p-2 scroll-smooth">
   {% for message in messages %}
-    <div class="border border-slate-250 px-2 py-1 my-1 rounded bg-white hover:bg-slate-50">
-      {{message.created_at }} {{message.user.username}}: {{message.content}}
-    </div>
+      {% if message.user.username == current_user.username %}
+      <div class="border border-slate-250 px-2 py-1 my-1.5 rounded bg-white hover:bg-slate-50 w-3/4 border-slate-300">
+        {{message.created_at }} {{message.user.username}}: {{message.content}}
+      </div>
+      {% else %}
+      <div class="border border-slate-250 px-2 py-1 my-1.5 rounded bg-white hover:bg-slate-50 w-3/4 border-slate-300">
+        {{message.created_at }} {{message.user.username}}: {{message.content}}
+      </div>
+    {% endif %}
   {% endfor %}
 </div>
 
-<form id="form" method="post" class="flex my-3">
+<form id="form" method="post" class="flex my-3 py-2">
   {{ form.hidden_tag() }}
-  <div>
+  <div class="grow mr-2">
     {{
       form.content(
-        class="py-0.5 px-2 border border-slate-300 rounded-md placeholder-slate-400",
+        class="py-1 px-2 border border-slate-300 rounded-md placeholder-slate-400 w-full bg-slate-50 hover:border-slate-400",
         placeholder="Enter a message"
       )
     }}
   </div>
   <div>
     {{ form.submit(
-      class="px-10 text-white py-0.5 bg-lime-700 hover:bg-lime-800 rounded-md",
+      class="px-10 text-white py-1 bg-cyan-600 hover:bg-cyan-700 cursor-pointer rounded-md",
       value="Send"
       ) }}
   </div>
