@@ -32,24 +32,32 @@
       <div>
         {{
           form.username(
-            class="py-0.5 px-2 border border-slate-300 rounded-md placeholder-slate-400",
+            class="py-0.5 px-2 border border-slate-300 rounded-md placeholder-slate-400 bg-slate-50 hover:border-slate-400",
             placeholder="Username"
           )
         }}
       </div>
       <div>
-        {{ form.submit(value="Create") }}
+        {{ form.submit(value="Create",
+        class="px-10 text-white py-0.5 bg-cyan-600 hover:bg-cyan-700 cursor-pointer rounded-md"
+        ) }}
       </div>
     </form>
   </div>
   <hr class="my-1">
   <div class="mx-2">
-    <p class="text-xl">My conversations</p>
-    <div class="flex flex-col h-[28em] overflow-y-scroll border rounded-md py-2 mt-3">
+    <p class="mb-2">My conversations</p>
+    <div class="flex flex-col h-[28em] overflow-y-scroll border rounded-md py-2 bg-slate-50">
       {% for conversation in conversations %}
-        <a href="{{ url_for('conversation', conversation_id=conversation[0]) }}">
-          <div class="my-1 border py-3 rounded px-2 hover:bg-[#f9f9f9] mx-5">
-            <span class="text-sky-600">{{ conversation[1] }}</span>
+        <a class="mx-3 my-1" href="{{ url_for('conversation', conversation_id=conversation[0]) }}">
+          <div class="border border-slate-300 py-2 rounded bg-white px-2 hover:border-blue-400 hover:bg-[#0000ff05]">
+            <div class="flex">
+              <span class="text-sky-600 grow">{{ conversation[1] }}</span>
+              <span>&lt;latest message timestamp&gt;</span>
+            </div>
+            <div>
+              &lt;latest message &gt;
+            </div>
           </div>
         </a>
       {% endfor %}
