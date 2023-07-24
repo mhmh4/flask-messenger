@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% block content %}
-<header class="flex py-2">
+<div class="border min-h-screen border-slate-300">
+<header class="flex py-2 mx-2">
   <div class="flex-1">MSGS</div>
   <form method="post" action="{{ url_for('signout') }}">
     <span class="text-gray-400">{{ current_user.username }}</span> <span class="text-gray-500 mx-1">-</span> <input type="submit" class="text-sky-600 underline hover:cursor-pointer" value="Sign out">
@@ -14,15 +15,22 @@
 
 <hr>
 
-<div class="flex py-2">
-  <div class="me-2">
-    <a href="{{ url_for('home') }}" class="text-sky-600 underline">Back</a>
+<div class="flex py-2 mx-2">
+  <div class="me-2 border-r pe-3 border-slate-400">
+    <a href="{{ url_for('home') }}" class="text-sky-600 underline">
+      <button class="px-4 rounded-2xl text-white bg-cyan-600 hover:bg-cyan-700">
+        back
+      </button>
+    </a>
   </div>
   <div>
     {{ other_user }}
   </div>
 </div>
-<div id="messages-container" class="h-96 overflow-y-scroll bg-slate-50 border rounded-lg p-2 scroll-smooth">
+
+<hr class="mb-3">
+
+<div id="messages-container" class="h-96 overflow-y-scroll bg-slate-50 border rounded-lg p-2 scroll-smooth mx-2">
   {% for message in messages %}
       {% if message.user.username == current_user.username %}
       <div class="border border-slate-250 px-2 py-1 my-1.5 rounded bg-white hover:bg-slate-50 w-3/4 border-slate-300">
@@ -36,7 +44,7 @@
   {% endfor %}
 </div>
 
-<form id="form" method="post" class="flex my-3 py-2">
+<form id="form" method="post" class="flex my-3 py-2 mx-2">
   {{ form.hidden_tag() }}
   <div class="grow mr-2">
     {{
@@ -53,6 +61,7 @@
       ) }}
   </div>
 </form>
+</div>
 
 <script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
 <script>
