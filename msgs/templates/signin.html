@@ -5,16 +5,19 @@
 {% endblock %}
 
 {% block content %}
-<div class="border mt-20">
-  <h1 class="text-center text-5xl my-4">MSGS</h1>
+<div class="mt-20">
+  <div class="my-4">
+    <h1 class="text-center text-3xl">MSGS</h1>
+    <p class="text-center text-slate-400">Welcome back, sign in to your account.</p>
+  </div>
 
   <div class="text-center mx-auto w-96">
-    <div class="flex my-3 py-4 bg-slate-100 rounded-md border border-slate-300">
+    <div class="flex my-3 py-4 bg-slate-100 rounded-xl border border-slate-300">
       <div class="mx-auto">
         <a href="{{ url_for('signin') }}" class="text-sky-600 bg-white mx-0.5 px-12 py-2 rounded-lg border border-sky-400">Sign in</a>
       </div>
       <div class="mx-auto">
-        <a href="{{ url_for('signup') }}" class="text-black bg-white mx-0.5 px-12 py-2 rounded-lg border border-slate-200">Sign up</a>
+        <a href="{{ url_for('signup') }}" class="text-black bg-white mx-0.5 px-12 py-2 rounded-lg border border-slate-200 hover:border-slate-400">Sign up</a>
       </div>
     </div>
 
@@ -24,7 +27,7 @@
       {% with messages = get_flashed_messages() %}
         {% if messages %}
           {% for message in messages %}
-            <div class="border">{{ message }}</div>
+            <div class="border my-2 py-2 rounded bg-slate-100 border-slate-300">{{ message }}</div>
           {% endfor %}
         {% endif %}
       {% endwith %}
@@ -32,7 +35,7 @@
       <div>
         {{
           form.username(
-            class="my-1 py-0.5 px-2 border border-slate-300 rounded-md placeholder-slate-400",
+            class="my-1 py-0.5 px-2 border bg-slate-50 hover:border-slate-400 border-slate-300 rounded-md placeholder-slate-400 w-96 h-10",
             placeholder="Username"
           )
         }}
@@ -40,12 +43,12 @@
       <div>
         {{
           form.password(
-            class="my-1 py-0.5 px-2 border border-slate-300 rounded-md placeholder-slate-400",
+            class="my-1 py-0.5 px-2 border bg-slate-50 hover:border-slate-400 border-slate-300 rounded-md placeholder-slate-400 w-96 h-10",
             placeholder="Password"
           )
         }}
       </div>
-      {{ form.submit(class="px-12 my-2 text-white bg-lime-700 hover:bg-lime-800 rounded-md", value="Submit") }}
+      {{ form.submit(class="px-12 my-2 text-white bg-cyan-600 cursor-pointer hover:bg-cyan-700 rounded-md w-96 h-8", value="Continue") }}
     </form>
   </div>
 </div>
