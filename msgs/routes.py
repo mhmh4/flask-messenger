@@ -2,6 +2,7 @@ from flask import flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from flask_socketio import join_room
 from sqlalchemy import select
+from sqlalchemy.orm import aliased
 
 from msgs import app, db, socketio
 from msgs.forms import ConversationForm, LoginForm, MessageForm, RegistrationForm
@@ -46,9 +47,7 @@ def signup():
         if User.query.filter_by(username=username).count():
             flash("Username already exists.")
             return redirect(url_for("signup"))
-        user = User(
-            username=username, password=request.form.get("password")
-        )
+        user = User(username=username, password=request.form.get("password"))
         db.session.add(user)
         db.session.commit()
         flash("Your account has been created.")
@@ -72,6 +71,23 @@ def home():
         other_user = User.query.filter_by(username=request.form.get("username")).first()
         if not other_user:
             flash("Cannot find other user.")
+            return redirect(url_for("home"))
+
+        participant1 = aliased(Participation)
+        participant2 = aliased(Participation)
+
+        conversation = (
+            db.session.query(participant1)
+            .join(
+                participant2,
+                participant1.conversation_id == participant2.conversation_id,
+            )
+            .filter(participant1.user_id == current_user.id)
+            .filter(participant2.user_id == other_user.id)
+            .first()
+        )
+        if conversation:
+            flash(f"Conversation with {other_user.username} already exists.")
             return redirect(url_for("home"))
 
         conversation = Conversation()
@@ -98,11 +114,12 @@ def home():
     conversations = (
         db.session.query(
             participating_conversations.c.conversation_id,
-            User.username.label("other_user")
+            User.username.label("other_user"),
         )
         .join(
             Participation,
-            Participation.conversation_id == participating_conversations.c.conversation_id
+            Participation.conversation_id
+            == participating_conversations.c.conversation_id,
         )
         .join(User, User.id == Participation.user_id)
         .filter(User.id != current_user.id)
