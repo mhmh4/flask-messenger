@@ -30,7 +30,7 @@
 
 <hr class="mb-3">
 
-<div id="messages-container" class="h-96 overflow-y-scroll bg-slate-50 border rounded-lg p-2 scroll-smooth mx-2">
+<div id="messages-container" class="h-96 overflow-y-scroll bg-slate-50 border rounded-lg p-2 mx-2">
   {% for message in messages %}
       {% if message.user.username == current_user.username %}
       <div class="border border-slate-250 px-2 py-1 my-1.5 rounded bg-white hover:bg-slate-50 w-3/4 border-slate-300">
@@ -65,13 +65,17 @@
 
 <script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
 <script>
+  const messages = document.getElementById("messages-container");
+  messages.scrollTop = messages.scrollHeight;
+  messages.classList.add("scroll-smooth");
+
   const socket = io();
   socket.on("connect", () => {
     socket.emit("my event", {data: "I'm connected!"});
     socket.emit("join");
   });
 
-  const messages = document.getElementById("messages-container");
+  // const messages = document.getElementById("messages-container");
 
   const form = document.getElementById("form");
   form.addEventListener("submit", (e) => {
@@ -90,7 +94,7 @@
   function appendMessage(message) {
     messages.innerHTML += `
     <div class="border border-slate-250 px-2 py-1 my-1 rounded">
-      ${message.created_at} ${message.username}: ${message.content}
+      ${message.created_at} ${message.username}: ${message.content.o}
     </div>
     `
     messages.scrollTop = messages.scrollHeight;
