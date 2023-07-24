@@ -70,6 +70,7 @@ def home():
     if form.validate_on_submit():
         other_user = User.query.filter_by(username=request.form.get("username")).first()
         if not other_user:
+            flash("Cannot find other user.")
             return redirect(url_for("home"))
 
         conversation = Conversation()
@@ -84,6 +85,7 @@ def home():
         )
         db.session.commit()
 
+        flash(f"Added conversation with {other_user.username}.")
         return redirect(url_for("home"))
 
     participating_conversations = (
