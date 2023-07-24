@@ -169,7 +169,7 @@ def handle_message(data):
         {
             "content": data,
             "username": message.user.username,
-            "timestamp": str(message.created_at),
+            "created_at": str(message.created_at),
         },
         to=session["conversation_id"],
     )
