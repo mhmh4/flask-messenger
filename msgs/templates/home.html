@@ -47,7 +47,7 @@
   <hr class="my-1">
   <div class="mx-2">
     <p class="mb-2">My conversations</p>
-    <div class="flex flex-col h-[25em] overflow-y-scroll border rounded-md my-auto bg-slate-50">
+    <div class="flex flex-col h-[25em] overflow-y-scroll border rounded-md py-2 my-2 bg-slate-50">
       {% for conversation in conversations %}
         <a class="mx-3 my-1" href="{{ url_for('conversation', conversation_id=conversation[0]) }}">
           <div class="border border-slate-300 py-2 rounded bg-white px-2 hover:border-blue-400 hover:bg-[#0000ff05]">
