@@ -94,7 +94,7 @@
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const input = document.getElementById("content");
-    if (!input.value) {
+    if (!input.value.trim()) {
       return;
     }
     socket.emit("message", input.value);
