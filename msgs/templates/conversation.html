@@ -32,14 +32,30 @@
 
 <div id="messages-container" class="h-96 overflow-y-scroll bg-slate-50 border rounded-lg p-2 mx-2">
   {% for message in messages %}
-      {% if message.user.username == current_user.username %}
-      <div class="border border-slate-250 px-2 py-1 my-1.5 rounded bg-white hover:bg-slate-50 w-3/4 border-slate-300">
-        {{message.created_at }} {{message.user.username}}: {{message.content}}
+    {% if message.user.username == current_user.username %}
+      <div class="flex">
+        <div class="w-3/5 my-1">
+          <div class="border px-2 py-1 rounded border-blue-400 bg-[#0000ff03] hover:bg-[#0000ff08]">
+            {{message.content}}
+          </div>
+          <small class="text-slate-500">
+            {{message.created_at}}
+          </small>
+        </div>
+        <div class="grow"></div>
       </div>
-      {% else %}
-      <div class="border border-slate-250 px-2 py-1 my-1.5 rounded bg-white hover:bg-slate-50 w-3/4 border-slate-300">
-        {{message.created_at }} {{message.user.username}}: {{message.content}}
-      </div>
+    {% else %}
+      <div class="flex">
+        <div class="grow"></div>
+        <div class="w-3/5 my-1">
+          <div class="border border-slate-250 px-2 py-1 rounded bg-white hover:bg-slate-50 border-slate-300">
+            {{message.content}}
+          </div>
+          <small class="float-right text-slate-500">
+            {{message.created_at}}
+          </small>
+        </div>
+    </div>
     {% endif %}
   {% endfor %}
 </div>
