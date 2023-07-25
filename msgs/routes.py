@@ -174,8 +174,6 @@ def on_join():
 
 @socketio.on("message")
 def handle_message(data):
-    print(f"Received message: {data}")
-    print(current_user.id, session["conversation_id"])
     message = Message(
         content=data,
         conversation_id=session["conversation_id"],
