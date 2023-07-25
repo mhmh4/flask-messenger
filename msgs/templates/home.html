@@ -24,15 +24,15 @@
 
   </div>
   <div class="flex mx-2 mt-1 py-1">
-    <div class="me-2">
-      <p>Create new conversation</p>
+    <div class="me-2 border-r pr-3 border-slate-300">
+      <p>Create a new conversation</p>
     </div>
     <form method="post" class="flex">
       {{ form.hidden_tag() }}
       <div>
         {{
           form.username(
-            class="py-0.5 px-2 border border-slate-300 rounded-md placeholder-slate-400 bg-slate-50 hover:border-slate-400",
+            class="py-0.5 mx-3 me-4 px-2 border border-slate-300 rounded-md placeholder-slate-400 bg-slate-50 hover:border-slate-400",
             placeholder="Username"
           )
         }}
@@ -47,7 +47,7 @@
   <hr class="my-1">
   <div class="mx-2">
     <p class="mb-2">My conversations</p>
-    <div class="flex flex-col h-[28em] overflow-y-scroll border rounded-md py-2 bg-slate-50">
+    <div class="flex flex-col h-[25em] overflow-y-scroll border rounded-md my-auto bg-slate-50">
       {% for conversation in conversations %}
         <a class="mx-3 my-1" href="{{ url_for('conversation', conversation_id=conversation[0]) }}">
           <div class="border border-slate-300 py-2 rounded bg-white px-2 hover:border-blue-400 hover:bg-[#0000ff05]">
