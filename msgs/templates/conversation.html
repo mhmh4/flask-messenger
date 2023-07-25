@@ -87,11 +87,8 @@
 
   const socket = io();
   socket.on("connect", () => {
-    socket.emit("my event", {data: "I'm connected!"});
     socket.emit("join");
   });
-
-  // const messages = document.getElementById("messages-container");
 
   const form = document.getElementById("form");
   form.addEventListener("submit", (e) => {
@@ -105,14 +102,12 @@
     input.focus();
   });
 
-  // make loaded messages use a class as well
-
   function appendMessage(message) {
     messages.innerHTML += `
-    <div class="border border-slate-250 px-2 py-1 my-1 rounded">
-      ${message.created_at} ${message.username}: ${message.content}
-    </div>
-    `
+      <div class="border border-slate-250 px-2 py-1 my-1 rounded">
+        ${message.created_at} ${message.username}: ${message.content}
+      </div>
+    `;
     messages.scrollTop = messages.scrollHeight;
   }
 
