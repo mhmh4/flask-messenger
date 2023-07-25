@@ -18,9 +18,7 @@
 <div class="flex py-2 mx-2">
   <div class="me-2 border-r pe-3 border-slate-400">
     <a href="{{ url_for('home') }}" class="text-sky-600 underline">
-      <button class="px-4 rounded-2xl text-white bg-cyan-600 hover:bg-cyan-700">
-        back
-      </button>
+      <button class="px-5 rounded-2xl text-white bg-cyan-600 hover:bg-cyan-700">back</button>
     </a>
   </div>
   <div>
@@ -38,7 +36,7 @@
           <div class="border px-2 py-1 rounded border-blue-400 bg-[#0000ff03] hover:bg-[#0000ff08]">
             {{message.content}}
           </div>
-          <small class="text-slate-500">
+          <small class="float-left text-slate-500">
             {{message.created_at}}
           </small>
         </div>
@@ -55,7 +53,7 @@
             {{message.created_at}}
           </small>
         </div>
-    </div>
+      </div>
     {% endif %}
   {% endfor %}
 </div>
@@ -71,10 +69,12 @@
     }}
   </div>
   <div>
-    {{ form.submit(
-      class="px-10 text-white py-1 bg-cyan-600 hover:bg-cyan-700 cursor-pointer rounded-md",
-      value="Send"
-      ) }}
+    {{
+      form.submit(
+        class="px-10 text-white py-1 bg-cyan-600 hover:bg-cyan-700 cursor-pointer rounded-md",
+        value="Send"
+      )
+    }}
   </div>
 </form>
 </div>
@@ -91,29 +91,55 @@
   });
 
   const form = document.getElementById("form");
+
+  let flag = false;
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const input = document.getElementById("content");
     if (!input.value.trim()) {
       return;
     }
+    flag = true;
     socket.emit("message", input.value);
     input.value = "";
     input.focus();
   });
 
-  function appendMessage(message) {
-    messages.innerHTML += `
-      <div class="border border-slate-250 px-2 py-1 my-1 rounded">
-        ${message.created_at} ${message.username}: ${message.content}
-      </div>
-    `;
+  async function appendMessage(message, flag) {
+    message = flag
+      ? `<div class="flex">
+            <div class="w-3/5 my-1">
+              <div class="border px-2 py-1 rounded border-blue-400 bg-[#0000ff03] hover:bg-[#0000ff08]">
+                ${message.content}
+              </div>
+              <small class="float-left text-slate-500">
+                ${message.created_at}
+              </small>
+            </div>
+            <div class="grow"></div>
+          </div>`
+      : `
+        <div class="flex">
+          <div class="grow"></div>
+            <div class="w-3/5 my-1">
+              <div class="border border-slate-250 px-2 py-1 rounded bg-white hover:bg-slate-50 border-slate-300">
+                ${message.content}
+              </div>
+              <small class="float-right text-slate-500">
+                ${message.created_at}
+              </small>
+            </div>
+          </div>
+        </div>
+      `;
+    messages.innerHTML += message;
     messages.scrollTop = messages.scrollHeight;
   }
 
-  socket.on("new_message", (message) => {
-    console.log(message);
-    appendMessage(message);
+  socket.on("new_message", async (message) => {
+    await appendMessage(message, flag);
+    flag = false;
   });
 </script>
 {% endblock %}
