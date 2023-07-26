@@ -1,6 +1,9 @@
 # MSGS
 
-<img src="images/er.png">
+<div>
+  <img src="images/screenshot.png" width="40%">
+  <img src="images/er.png" width="50%">
+</div>
 
 ## Running
 
@@ -15,12 +18,12 @@ git clone https://github.com/mhmh4/MSGS.git
 poetry install
 ```
 
-*Note: If you're not using Poetry, you can still install the dependencies by creating a virtual environment and using `requirements.txt`.*
+Note: If you're not using Poetry, you can still install the dependencies by creating a virtual environment and using `requirements.txt`.
 
 2\.5. (Optional). If you have MySQL on your machine and would like to use that instead of SQLite, do the following:
-  * Rename `config.ini.template` to `config.ini`
-  * Add your connection parameters to `config.ini`
-  * Go to `msgs/__init__.py` and set `DB_FLAG`'s value to 1.
+* Rename `config.ini.template` to `config.ini`
+* Add your connection parameters to `config.ini`
+* Go to `msgs/__init__.py` and set `DB_FLAG`'s value to 1.
 
 3\. Run the following Poetry command.
 ```
