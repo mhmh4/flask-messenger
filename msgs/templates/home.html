@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-<title>MSGS - Home</title>
+  <title>MSGS - Home</title>
 {% endblock %}
 
 {% block content %}
@@ -9,19 +9,20 @@
   <header class="flex py-2 mx-2">
     <div class="flex-1">MSGS</div>
     <form method="post" action="{{ url_for('signout') }}">
-      <span class="text-gray-400">{{ current_user.username }}</span> <span class="text-gray-500 mx-1">-</span> <input type="submit" class="text-sky-600 underline hover:cursor-pointer" value="Sign out">
+      <span class="text-gray-400">{{ current_user.username }}</span>
+      <span class="border-l border-slate-400 mx-3"></span>
+      <input type="submit" class="text-sky-600 underline hover:cursor-pointer" value="Sign out">
     </form>
   </header>
   <hr>
   <div>
     {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      {% for message in messages %}
-      <div class="border my-2 py-1.5 rounded bg-slate-100 border-slate-300 px-2 mx-2">{{ message }}</div>
-      {% endfor %}
-    {% endif %}
-  {% endwith %}
-
+      {% if messages %}
+        {% for message in messages %}
+          <div class="border my-2 py-1.5 rounded bg-slate-100 border-slate-300 px-2 mx-2">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
   </div>
   <div class="flex mx-2 mt-1 py-1">
     <div class="me-2 border-r pr-3 border-slate-300">
@@ -38,9 +39,12 @@
         }}
       </div>
       <div>
-        {{ form.submit(value="Create",
-        class="px-10 text-white py-0.5 bg-cyan-600 hover:bg-cyan-700 cursor-pointer rounded-md"
-        ) }}
+        {{
+          form.submit(
+            value="Create",
+            class="px-10 text-white py-0.5 bg-cyan-600 hover:bg-cyan-700 cursor-pointer rounded-md"
+          )
+      }}
       </div>
     </form>
   </div>
