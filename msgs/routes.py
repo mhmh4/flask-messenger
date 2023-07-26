@@ -1,7 +1,7 @@
 from flask import abort, flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from flask_socketio import join_room
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import aliased
 
 from msgs import app, db, socketio
@@ -92,7 +92,7 @@ def home():
 
         conversation = Conversation()
         db.session.add(conversation)
-        db.session.commit()  # `conversation.id` now usuable
+        db.session.commit()  # conversation.id now usuable
 
         db.session.add(
             Participation(user_id=current_user.id, conversation_id=conversation.id)
@@ -111,10 +111,20 @@ def home():
         .alias("participating_conversations")
     )
 
+    latest_messages_subquery = (
+        db.session.query(
+            Message.conversation_id,
+            func.max(Message.created_at).label("latest_created_at")
+        )
+        .group_by(Message.conversation_id)
+        .subquery("latest_messages")
+    )
+
     conversations = (
         db.session.query(
             participating_conversations.c.conversation_id,
             User.username.label("other_user"),
+            latest_messages_subquery.c.latest_created_at
         )
         .join(
             Participation,
@@ -122,6 +132,10 @@ def home():
             == participating_conversations.c.conversation_id,
         )
         .join(User, User.id == Participation.user_id)
+        .outerjoin(
+            latest_messages_subquery,
+            participating_conversations.c.conversation_id == latest_messages_subquery.c.conversation_id
+        )
         .filter(User.id != current_user.id)
         .all()
     )
