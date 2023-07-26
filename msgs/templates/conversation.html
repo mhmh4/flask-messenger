@@ -97,6 +97,7 @@
     if (!input.value.trim()) {
       return;
     }
+    flag = true;
     socket.emit("message", input.value);
     input.value = "";
     input.focus();
@@ -134,7 +135,6 @@
   }
 
   socket.on("new_message", async (message) => {
-    flag = true;
     await appendMessage(message, flag);
     flag = false;
   });
