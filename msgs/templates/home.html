@@ -52,11 +52,8 @@
         <a class="mx-3 my-1" href="{{ url_for('conversation', conversation_id=conversation[0]) }}">
           <div class="border border-slate-300 py-2 rounded bg-white px-2 hover:border-blue-400 hover:bg-[#0000ff05]">
             <div class="flex">
-              <span class="text-sky-600 grow">{{ conversation[1] }}</span>
-              <span>&lt;latest message timestamp&gt;</span>
-            </div>
-            <div>
-              &lt;latest message &gt;
+              <span class="grow">{{ conversation[1] }}</span>
+              <span class="text-slate-400">{{conversation[2] if conversation[2] else ""}}</span>
             </div>
           </div>
         </a>
