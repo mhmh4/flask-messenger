@@ -11,14 +11,14 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY") or "secret key"
 
 # SQLite
-# app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///main.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///main.db"
 
 # MySQL
-config = configparser.ConfigParser()
-config.read("config.ini")
-uri = "mysql://{}:{}@{}:{}/{}"
-uri = uri.format(*config["mysql"].values())
-app.config["SQLALCHEMY_DATABASE_URI"] = uri
+# config = configparser.ConfigParser()
+# config.read("config.ini")
+# uri = "mysql://{}:{}@{}:{}/{}"
+# uri = uri.format(*config["mysql"].values())
+# app.config["SQLALCHEMY_DATABASE_URI"] = uri
 
 Minify(app=app, html=True, js=True)
 db = SQLAlchemy(app)
