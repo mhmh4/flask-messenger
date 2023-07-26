@@ -1,82 +1,80 @@
 {% extends "base.html" %}
 
 {% block title %}
-<title>MSGS - Conversation</title>
+  <title>MSGS - Conversation</title>
 {% endblock %}
 
 {% block content %}
 <div class="border min-h-screen border-slate-300">
-<header class="flex py-2 mx-2">
-  <div class="flex-1">MSGS</div>
-  <form method="post" action="{{ url_for('signout') }}">
-    <span class="text-gray-400">{{ current_user.username }}</span> <span class="text-gray-500 mx-1">-</span> <input type="submit" class="text-sky-600 underline hover:cursor-pointer" value="Sign out">
+  <header class="flex py-2 mx-2">
+    <div class="flex-1">MSGS</div>
+    <form method="post" action="{{ url_for('signout') }}">
+      <span class="text-gray-400">{{ current_user.username }}</span>
+      <span class="border-l border-slate-400 mx-3"></span>
+      <input type="submit" class="text-sky-600 underline hover:cursor-pointer" value="Sign out">
+    </form>
+  </header>
+  <hr>
+  <div class="flex py-2 mx-2">
+    <div class="me-2 border-r pe-3 border-slate-400">
+      <a href="{{ url_for('home') }}" class="text-sky-600 underline">
+        <button class="px-5 rounded-2xl text-white bg-cyan-600 hover:bg-cyan-700">back</button>
+      </a>
+    </div>
+    <div>
+      {{ other_user }}
+    </div>
+  </div>
+  <hr class="mb-3">
+
+  <div id="messages-container" class="h-96 overflow-y-scroll bg-slate-50 border rounded-lg p-2 mx-2">
+    {% for message in messages %}
+      {% if message.user.username == current_user.username %}
+        <div class="flex">
+          <div class="w-3/5 my-1">
+            <div class="border px-2 py-1 rounded border-blue-400 bg-[#0000ff03] hover:bg-[#0000ff08]">
+              {{message.content}}
+            </div>
+            <small class="float-left text-slate-500">
+              {{message.created_at}}
+            </small>
+          </div>
+          <div class="grow"></div>
+        </div>
+      {% else %}
+        <div class="flex">
+          <div class="grow"></div>
+          <div class="w-3/5 my-1">
+            <div class="border border-slate-250 px-2 py-1 rounded bg-white hover:bg-slate-50 border-slate-300">
+              {{message.content}}
+            </div>
+            <small class="float-right text-slate-500">
+              {{message.created_at}}
+            </small>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+  <form id="form" method="post" class="flex my-3 py-2 mx-2">
+    {{ form.hidden_tag() }}
+    <div class="grow mr-2">
+      {{
+        form.content(
+          class="py-1 px-2 border border-slate-300 rounded-md placeholder-slate-400 w-full bg-slate-50 hover:border-slate-400",
+          placeholder="Enter a message"
+        )
+      }}
+    </div>
+    <div>
+      {{
+        form.submit(
+          class="px-10 text-white py-1 bg-cyan-600 hover:bg-cyan-700 cursor-pointer rounded-md",
+          value="Send"
+        )
+      }}
+    </div>
   </form>
-</header>
-
-<hr>
-
-<div class="flex py-2 mx-2">
-  <div class="me-2 border-r pe-3 border-slate-400">
-    <a href="{{ url_for('home') }}" class="text-sky-600 underline">
-      <button class="px-5 rounded-2xl text-white bg-cyan-600 hover:bg-cyan-700">back</button>
-    </a>
-  </div>
-  <div>
-    {{ other_user }}
-  </div>
-</div>
-
-<hr class="mb-3">
-
-<div id="messages-container" class="h-96 overflow-y-scroll bg-slate-50 border rounded-lg p-2 mx-2">
-  {% for message in messages %}
-    {% if message.user.username == current_user.username %}
-      <div class="flex">
-        <div class="w-3/5 my-1">
-          <div class="border px-2 py-1 rounded border-blue-400 bg-[#0000ff03] hover:bg-[#0000ff08]">
-            {{message.content}}
-          </div>
-          <small class="float-left text-slate-500">
-            {{message.created_at}}
-          </small>
-        </div>
-        <div class="grow"></div>
-      </div>
-    {% else %}
-      <div class="flex">
-        <div class="grow"></div>
-        <div class="w-3/5 my-1">
-          <div class="border border-slate-250 px-2 py-1 rounded bg-white hover:bg-slate-50 border-slate-300">
-            {{message.content}}
-          </div>
-          <small class="float-right text-slate-500">
-            {{message.created_at}}
-          </small>
-        </div>
-      </div>
-    {% endif %}
-  {% endfor %}
-</div>
-
-<form id="form" method="post" class="flex my-3 py-2 mx-2">
-  {{ form.hidden_tag() }}
-  <div class="grow mr-2">
-    {{
-      form.content(
-        class="py-1 px-2 border border-slate-300 rounded-md placeholder-slate-400 w-full bg-slate-50 hover:border-slate-400",
-        placeholder="Enter a message"
-      )
-    }}
-  </div>
-  <div>
-    {{
-      form.submit(
-        class="px-10 text-white py-1 bg-cyan-600 hover:bg-cyan-700 cursor-pointer rounded-md",
-        value="Send"
-      )
-    }}
-  </div>
-</form>
 </div>
 
 <script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
@@ -85,14 +83,13 @@
   messages.scrollTop = messages.scrollHeight;
   messages.classList.add("scroll-smooth");
 
+  const form = document.getElementById("form");
+  let flag = false;
+
   const socket = io();
   socket.on("connect", () => {
     socket.emit("join");
   });
-
-  const form = document.getElementById("form");
-
-  let flag = false;
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -100,7 +97,6 @@
     if (!input.value.trim()) {
       return;
     }
-    flag = true;
     socket.emit("message", input.value);
     input.value = "";
     input.focus();
@@ -109,16 +105,16 @@
   async function appendMessage(message, flag) {
     message = flag
       ? `<div class="flex">
-            <div class="w-3/5 my-1">
-              <div class="border px-2 py-1 rounded border-blue-400 bg-[#0000ff03] hover:bg-[#0000ff08]">
-                ${message.content}
-              </div>
-              <small class="float-left text-slate-500">
-                ${message.created_at}
-              </small>
+          <div class="w-3/5 my-1">
+            <div class="border px-2 py-1 rounded border-blue-400 bg-[#0000ff03] hover:bg-[#0000ff08]">
+              ${message.content}
             </div>
-            <div class="grow"></div>
-          </div>`
+            <small class="float-left text-slate-500">
+              ${message.created_at}
+            </small>
+            </div>
+          <div class="grow"></div>
+        </div>`
       : `
         <div class="flex">
           <div class="grow"></div>
@@ -138,6 +134,7 @@
   }
 
   socket.on("new_message", async (message) => {
+    flag = true;
     await appendMessage(message, flag);
     flag = false;
   });
