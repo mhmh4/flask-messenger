@@ -10,15 +10,18 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY") or "secret key"
 
-# SQLite
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///main.db"
+DB_FLAG = 0
 
-# MySQL
-# config = configparser.ConfigParser()
-# config.read("config.ini")
-# uri = "mysql://{}:{}@{}:{}/{}"
-# uri = uri.format(*config["mysql"].values())
-# app.config["SQLALCHEMY_DATABASE_URI"] = uri
+if DB_FLAG == 0:
+    # Use SQLite
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///main.db"
+elif DB_FLAG == 1:
+    # Use MySQL
+    config = configparser.ConfigParser()
+    config.read("config.ini")
+    uri = "mysql://{}:{}@{}:{}/{}"
+    uri = uri.format(*config["mysql"].values())
+    app.config["SQLALCHEMY_DATABASE_URI"] = uri
 
 Minify(app=app, html=True, js=True)
 db = SQLAlchemy(app)
