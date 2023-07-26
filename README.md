@@ -2,7 +2,7 @@
 
 <div>
   <img src="images/screenshot.png" width="40%">
-  <img src="images/er.png" width="50%">
+  <img src="images/er.png" width="51%">
 </div>
 
 ## Running
