@@ -1,4 +1,4 @@
-from flask import flash, redirect, render_template, request, session, url_for
+from flask import abort, flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from flask_socketio import join_room
 from sqlalchemy import select
@@ -132,6 +132,18 @@ def home():
 @app.route("/conversation/<int:conversation_id>", methods=["GET", "POST"])
 @login_required
 def conversation(conversation_id):
+
+    # Send 401 error if user is trying to access a convo they're not in.
+    if not (
+        db.session.query(Participation)
+        .where(
+            Participation.user_id == current_user.id,
+            Participation.conversation_id == conversation_id,
+        )
+        .first()
+    ):
+        abort(401)
+
     conversation = Conversation.query.filter_by(id=conversation_id).first()
     session["conversation_id"] = conversation_id
 
