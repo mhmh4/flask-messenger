@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-<title>MSGS - Sign in</title>
+  <title>MSGS - Sign in</title>
 {% endblock %}
 
 {% block content %}
@@ -10,7 +10,6 @@
     <h1 class="text-center text-3xl">MSGS</h1>
     <p class="text-center text-slate-400">Welcome back, sign in to your account.</p>
   </div>
-
   <div class="text-center mx-auto w-96">
     <div class="flex my-3 py-4 bg-slate-100 rounded-xl border border-slate-300">
       <div class="mx-auto">
@@ -20,10 +19,8 @@
         <a href="{{ url_for('signup') }}" class="text-black bg-white mx-0.5 px-12 py-2 rounded-lg border border-slate-200 hover:border-slate-400">Sign up</a>
       </div>
     </div>
-
     <form method="post">
       {{ form.hidden_tag() }}
-
       {% with messages = get_flashed_messages() %}
         {% if messages %}
           {% for message in messages %}
@@ -31,7 +28,6 @@
           {% endfor %}
         {% endif %}
       {% endwith %}
-
       <div>
         {{
           form.username(
