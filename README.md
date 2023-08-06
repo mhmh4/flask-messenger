@@ -1,8 +1,8 @@
 # MSGS
 
 <div>
-  <img src="images/screenshot.png" width="40%">
-  <img src="images/er.png" width="51%">
+  <img src="images/screenshot.png" width="60.5%">
+  <img src="images/er.png" width="37%">
 </div>
 
 ## Running
