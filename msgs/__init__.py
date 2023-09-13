@@ -16,11 +16,11 @@ if DB_FLAG == 0:
     # Use SQLite
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///main.db"
 elif DB_FLAG == 1:
-    # Use MySQL
+    # Use PostgreSQL
     config = configparser.ConfigParser()
     config.read("config.ini")
-    uri = "mysql://{}:{}@{}:{}/{}"
-    uri = uri.format(*config["mysql"].values())
+    uri = "postgresql://{}:{}@{}:{}/{}"
+    uri = uri.format(*config["postgresql"].values())
     app.config["SQLALCHEMY_DATABASE_URI"] = uri
 
 Minify(app=app, html=True, js=True)
