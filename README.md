@@ -19,7 +19,7 @@ git clone https://github.com/mhmh4/MSGS.git
 pip install -r requirements.txt
 ```
 
-2.5\) [Optional] If you have MySQL on your machine and would like to use it instead of SQLite, do the following:
+2.5\) [Optional] If you have PostgreSQL on your machine and would like to use it instead of SQLite, do the following:
 - Rename `config.ini.template` to `config.ini`.
 - Add your connection parameters to `config.ini`.
 - Go to `msgs/__init__.py` and set `DB_FLAG`'s value to 1.
