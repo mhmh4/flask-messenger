@@ -1,4 +1,4 @@
-# MSGS
+# flask-messenger
 
 <div>
   <img src="images/screenshot.png" width="60.5%">
@@ -10,7 +10,7 @@
 1\) Clone the repository.
 
 ```
-git clone https://github.com/mhmh4/MSGS.git
+git clone https://github.com/mhmh4/flask-messenger.git
 ```
 
 2\) Install dependencies using pip.
