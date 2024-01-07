@@ -5,7 +5,7 @@
   <img src="images/er.png" width="37%">
 </div>
 
-## Running
+## Getting Started
 
 1\) Clone the repository.
 
