@@ -1,5 +1,3 @@
-# flask-messenger
-
 <div>
   <img src="images/screenshot.png" width="60.5%">
   <img src="images/er.png" width="37%">
